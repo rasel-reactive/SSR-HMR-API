@@ -5,7 +5,6 @@ const userSchema = new Schema({
   email: String,
   password: String,
   avatar: String,
-}, {timestamp: true}  )
-
+}, { timestamp: true }  )
 
 mongoose.model('User', userSchema)

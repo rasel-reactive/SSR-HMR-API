@@ -47,6 +47,5 @@ const routes = [
 
 export default routes;
 
-
 // NOTE:: here page == { component: PageName, loadData: function }
 

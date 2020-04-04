@@ -7,7 +7,6 @@ import reducers from "../../src/reducers";
 
 
 export default (req)=>{
-
   //! only when page initial api call then apply it. mean,
   //- ( it only apply server side api call... )
 
@@ -18,17 +17,21 @@ export default (req)=>{
   // To Solution ==> (when page initial call api.  ==> only then apply it )
   // we create axios instance and set baseUrl and cookie 
 
+  // const axiosInstance = Axios.create({
+  //   baseURL :"http://localhost:4001",
+  //   headers: { "cookie": req.get("cookie") || '' }
+  // })
+
+  // if not separate backend
   const axiosInstance = Axios.create({
-    baseURL :"http://localhost:4000",
+    baseURL :"http://localhost:4000/api",
     headers: { "cookie": req.get("cookie") || '' }
   })
 
   const store = createStore(reducers, 
     {}, 
-    // applyMiddleware(reduxThunk)
     applyMiddleware(reduxThunk.withExtraArgument(axiosInstance))
   );
-
   return store
 }
 

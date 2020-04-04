@@ -11,7 +11,7 @@ export default function(req, store){
   const content = renderToString(
     <Provider store={store}>
       <StaticRouter location={req.url} context={{}}>
-        {renderRoutes(Routes)}
+        { renderRoutes(Routes) }
       </StaticRouter>
     </Provider>
   );
@@ -30,7 +30,7 @@ function template(content, store){
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
       <meta name="themes" content="#f43454">
       <title>Server Side Rendering</title>
-      <link rel="stylesheet" href="static/css/index.css">
+      <link rel="stylesheet" href="static/css/main.css">
     </head>
     <body>
       <div id="root">${content}</div>

@@ -4,18 +4,13 @@ import { FETCH_USERS, FETCH_USER, LOGIN, LOGOUT } from '../actions/types'
 
 
 
-
-const initialAuthState = {
-  isAuthenticated: false,
-}
-
-const authReducer = (state=initialAuthState, action)=>{
+const authReducer = (state={}, action)=>{
   switch(action.type){
     case LOGIN :
-      return {...state, ...action.payload}
+      return action.payload
     
     case LOGOUT :
-      return {...state, ...action.payload}
+      return action.payload
 
     default:
       return state  

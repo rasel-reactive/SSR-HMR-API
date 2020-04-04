@@ -21,7 +21,7 @@ import reducers from "./reducers";
 // which we get from our dispatch function like (dispatch, getState, ourData)=>{}
 
 const axiosInstance = Axios.create({
-  baseURL: "/",
+  baseURL: "/api",
 })
 
 

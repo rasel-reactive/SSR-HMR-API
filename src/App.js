@@ -9,7 +9,7 @@ import "./style.css";
 
 class App extends React.Component{
   componentDidMount() {
-    this.props.fetchCurrentUser()    
+    // this.props.fetchCurrentUser()    
   }
   render(){        
     return(

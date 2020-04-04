@@ -1,10 +1,8 @@
 import express from "express"
-import passport from 'passport'
-import mongoose from 'mongoose'
-import cookieSession from "cookie-session";
-import expressSession from "express-session"
-import cors from 'cors'
+import path from 'path'
+import expressHttpProxy from "express-http-proxy";
 import httpProxyMiddleware from "http-proxy-middleware";
+
 
 // react SSR staff.......
 import { matchRoutes } from 'react-router-config'
@@ -15,25 +13,24 @@ import createStore from './helper/createStore'
 import Routes from '../src/Routes'
 
 
-
-
-
-// import mongoose model
-import './models/User'
-
-// passport strategy setup
-import './passport/passportLocal'
-
-// Routers...................
-import userRoutes from './routes/users'
-import authRoutes from './routes/auth'
-
-
-
 const server = express()
+server.use(express.static(path.join(__dirname, '/')));
 server.use(express.static("build"));
-server.use(express.json())
-server.use(cors());
+
+import keys from "../config/keys";
+
+// our backend bussness logic
+import App from './app'
+App(server)
+
+
+// connect our backend-rest-api via proxy........
+// server.use('/api', expressHttpProxy('http://localhost:4001', {
+//   proxyReqOptDecorator(opts){
+//     opts.headers['x-forwarded-host'] = 'localhost:4000'
+//     return opts
+//   }
+// }))
 
 
 // For Dev Tools
@@ -45,36 +42,6 @@ server.use(["/static", "/sockjs-node"], httpProxyMiddleware({
     changeOrigin: true
   })
 );
-
-// passport Set_cookie throught express session
-// server.use(expressSession({
-//     resave: true,
-//     saveUninitialized: true,
-//     secret: "Secret"
-// }))
-
-
-// passport Set_cookie inside Client Browser
-server.use(
-  cookieSession({
-    name: "SSR",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    keys: ["cookieSecret"]
-  })
-);
-
-// passport initialize.....
-server.use(passport.initialize());
-
-// Set current user obj inside req object
-server.use(passport.session());
-
-
-// routes........
-server.use(userRoutes)
-server.use(authRoutes)
-
-
 
 
 // express give responsible any route to react router. 
@@ -98,21 +65,15 @@ server.get("*", (req, res) => {
   // wait server render html.... (cause we need also data)
   Promise.all(promises).then(()=>{
     const content = renderer(req, store);
-    console.log(store.getState());
-    
     
     // now server side redux store is full fill via data.....
     // (cause.. here loadData function execute finished)
     // and now send response html + data + and (server side redux store )
     res.send(content)
   })
-
 });
 
-const PORT = process.env.PORT || 4000;
+
+
+const PORT = keys.PORT;
 server.listen(PORT, ()=>console.log(`server is running on http://localhost:${PORT}`))
-mongoose.connect("mongodb://localhost/React_SSR_DB", {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
-}).then(res => console.log("Database Connected."))
-.catch(err => console.log(err));

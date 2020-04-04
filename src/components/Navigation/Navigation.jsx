@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login, logout } from '../../actions/authAction'
 
-import "./Navigation.css"
+import "./Navigation.scss"
 
 const Navigation = (props) => {
   return (
@@ -14,7 +14,7 @@ const Navigation = (props) => {
           <li><NavLink to="/users"> Users </NavLink></li>
       </ul>
       <ul className="auth_nav">
-        { props.auth.isAuthenticated
+        { props.auth.userId
         ? (
           <React.Fragment>
             <li><NavLink to='/dashboard'>{props.auth.username}</NavLink></li>

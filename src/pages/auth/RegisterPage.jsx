@@ -157,4 +157,4 @@ class RegisterPage extends React.Component {
 
 export default {
   component: connect(null, { register })(RegisterPage)
-  };
+};
